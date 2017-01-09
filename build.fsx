@@ -9,7 +9,7 @@ let dependencies =
     |> List.ofSeq
 
 // Directories
-let buildDir  = "./build/"
+let buildDir  = "./picdoc/build/"
 let deployDir = "./deploy/"
 let releaseNotes = "./RELEASE_NOTES.md"
 
@@ -27,8 +27,7 @@ Target "Clean" (fun _ ->
 )
 
 Target "Build" (fun _ ->
-    // compile all projects below src/app/
-    MSBuildDebug buildDir "Build" appReferences
+    MSBuildDebug null "Build" appReferences
     |> Log "AppBuild-Output: "
 )
 
@@ -36,21 +35,16 @@ let getNugetParam param =
     {param with
         OutputPath = deployDir
         WorkingDir = deployDir
-        Files = [ ("build/*", None, None) ]
         Dependencies = dependencies
         ReleaseNotes = System.IO.File.ReadAllText releaseNotes
         Version = version }
 
-let setNugetKey = fun p -> { p with AccessKey = getBuildParam "nugetkey" }
-
-Target "Pack" (fun _ -> NuGetPack getNugetParam "picdoc.nuspec")
-Target "Publish" (fun _ -> NuGetPublish (getNugetParam >> setNugetKey)) // publish doesn't work yet
+Target "Pack" (fun _ -> NuGetPack getNugetParam "./picdoc/picdoc.fsproj") // doesn't properly bundle picdoc.exe and its dependencies
 
 // Build order
 "Clean"
   ==> "Build"
   ==> "Pack"
-  ==> "Publish"
 
 // start build
 RunTargetOrDefault "Build"

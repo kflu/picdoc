@@ -1,0 +1,8 @@
+type project
+id picdoc
+version 1.0.0
+authors KFL
+description
+    description of this test package
+references
+    argu.dll

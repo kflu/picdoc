@@ -7,6 +7,7 @@
   <owners>@authors@</owners>
   <summary>@summary@</summary>
   <projectUrl>https://github.com/kflu/picdoc</projectUrl>
+  <licenseUrl>https://raw.githubusercontent.com/kflu/picdoc/master/LICENSE</licenseUrl>
   <requireLicenseAcceptance>false</requireLicenseAcceptance>
   <description>@description@</description>
   <releaseNotes>@releaseNotes@</releaseNotes>

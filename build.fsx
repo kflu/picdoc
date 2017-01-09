@@ -10,8 +10,9 @@ let dependencies =
 // Directories
 let buildDir  = "./build/"
 let deployDir = "./deploy/"
+let releaseNotes = "./RELEASE_NOTES.md"
 
-let release = ReadFile "./RELEASE_NOTES.md" |> ReleaseNotesHelper.parseReleaseNotes
+let release = ReleaseNotesHelper.LoadReleaseNotes releaseNotes
 
 let authors = ["KL"]
 let projectName = "picdoc"
@@ -35,28 +36,30 @@ Target "Build" (fun _ ->
     |> Log "AppBuild-Output: "
 )
 
-Target "CreatePackage" (fun _ ->
-    // Copy all the package files into a package folder
-    //!! "./build/*" |> CopyFiles deployDir
+let getNugetParam param =
+    {param with
+        Authors = authors
+        Project = projectName
+        Description = projectDescription
+        OutputPath = deployDir
+        Summary = projectSummary
+        WorkingDir = deployDir
+        Files = [ ("../build/*", None, None) ]
+        Dependencies = dependencies
+        ReleaseNotes = System.IO.File.ReadAllText releaseNotes
+        Version = version }
 
-    NuGetPack (fun p -> 
-            {p with
-                Authors = authors
-                Project = projectName
-                Description = projectDescription
-                OutputPath = deployDir
-                Summary = projectSummary
-                WorkingDir = deployDir
-                Files = [ ("../build/*", None, None) ]
-                Dependencies = dependencies 
-                Version = version }) 
-                "picdoc.nuspec")
+let setNugetKey = fun p -> { p with AccessKey = getBuildParam "nugetkey" }
+
+Target "Pack" (fun _ -> NuGetPack getNugetParam "picdoc.nuspec")
+Target "Publish" (fun _ -> NuGetPublish (getNugetParam >> setNugetKey)) // publish doesn't work yet
 
 // Build order
 "Clean"
   ==> "Build"
-  ==> "CreatePackage"
+  ==> "Pack"
+  ==> "Publish"
 
 // start build
 //RunTargetOrDefault "Build"
-RunTargetOrDefault "CreatePackage"
+RunTargetOrDefault "Pack"

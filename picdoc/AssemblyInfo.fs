@@ -6,9 +6,9 @@ open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
 
 [<assembly: AssemblyTitle("picdoc")>]
-[<assembly: AssemblyDescription("description of this test package")>]
-[<assembly: AssemblyVersion("1.0.0")>]
-[<assembly: AssemblyFileVersion("1.0.0")>]
-[<assembly: AssemblyInformationalVersion("1.0.0")>]
+[<assembly: AssemblyDescription("Command line tool to generate markdown doc by extracting metadata from image files.")>]
+[<assembly: AssemblyVersion("1.0.1")>]
+[<assembly: AssemblyFileVersion("1.0.1")>]
+[<assembly: AssemblyInformationalVersion("1.0.1")>]
 
 ()

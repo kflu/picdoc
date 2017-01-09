@@ -3,7 +3,14 @@ authors KFL
 licenseUrl https://raw.githubusercontent.com/kflu/picdoc/master/LICENSE
 projectUrl https://github.com/kflu/picdoc
 tags exif cli markdown
-description
-    description of this test package
+
 files
     bin/**/* ==> tools/
+
+// To minimize download size. There could be another nuget library package
+// for people to reference to
+excludeddependencies
+    FSharp.Core
+    MetadataExtractor
+    Argu
+    Nustache

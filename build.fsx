@@ -3,6 +3,7 @@
 
 open Fake
 open Fake.NuGetHelper
+
 let dependencies = 
     Fake.Paket.GetDependenciesForReferencesFile "./picdoc/paket.references"
     |> List.ofSeq
@@ -13,11 +14,6 @@ let deployDir = "./deploy/"
 let releaseNotes = "./RELEASE_NOTES.md"
 
 let release = ReleaseNotesHelper.LoadReleaseNotes releaseNotes
-
-let authors = ["KL"]
-let projectName = "picdoc"
-let projectDescription = "Generate markdown by extracting EXIF data from images"
-let projectSummary = "picdoc"
 let version = release.AssemblyVersion
 
 // Filesets
@@ -38,13 +34,9 @@ Target "Build" (fun _ ->
 
 let getNugetParam param =
     {param with
-        Authors = authors
-        Project = projectName
-        Description = projectDescription
         OutputPath = deployDir
-        Summary = projectSummary
         WorkingDir = deployDir
-        Files = [ ("../build/*", None, None) ]
+        Files = [ ("build/*", None, None) ]
         Dependencies = dependencies
         ReleaseNotes = System.IO.File.ReadAllText releaseNotes
         Version = version }
@@ -61,5 +53,4 @@ Target "Publish" (fun _ -> NuGetPublish (getNugetParam >> setNugetKey)) // publi
   ==> "Publish"
 
 // start build
-//RunTargetOrDefault "Build"
-RunTargetOrDefault "Pack"
+RunTargetOrDefault "Build"

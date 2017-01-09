@@ -1,7 +1,8 @@
 type project
-id picdoc
-version 1.0.0
 authors KFL
+licenseUrl https://raw.githubusercontent.com/kflu/picdoc/master/LICENSE
+projectUrl https://github.com/kflu/picdoc
+tags exif cli markdown
 description
     description of this test package
 files

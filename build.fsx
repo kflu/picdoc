@@ -2,15 +2,14 @@
 #r "./packages/FAKE/tools/FakeLib.dll"
 
 open Fake
-open Fake.NuGetHelper
+open Fake.Paket
+open System.IO
 
 let dependencies = 
     Fake.Paket.GetDependenciesForReferencesFile "./picdoc/paket.references"
     |> List.ofSeq
 
 // Directories
-let buildDir  = "./picdoc/build/"
-let deployDir = "./deploy/"
 let releaseNotes = "./RELEASE_NOTES.md"
 
 let release = ReleaseNotesHelper.LoadReleaseNotes releaseNotes
@@ -21,25 +20,41 @@ let appReferences  =
     !! "/**/*.csproj"
     ++ "/**/*.fsproj"
 
+let flavor = 
+    match (getBuildParamOrDefault "flavor" "Debug").ToLower() with
+    | "debug" -> "Debug"
+    | "release" -> "Release"
+    | _ -> failwith "Flavor not supported"
+
+let buildCmd = 
+    if flavor = "Debug" then MSBuildDebug
+    else MSBuildRelease
+
 // Targets
 Target "Clean" (fun _ ->
-    CleanDirs [buildDir; deployDir]
+    appReferences |> Seq.map (fun r -> Path.Combine(Path.GetDirectoryName r, "bin")) |> CleanDirs
 )
 
 Target "Build" (fun _ ->
-    MSBuildDebug null "Build" appReferences
+
+    // update assembly versions
+    let assemblyInfos = !! "**/AssemblyInfo.fs"
+    AssemblyInfoHelper.ReplaceAssemblyInfoVersionsBulk assemblyInfos (fun p ->
+        { p with AssemblyVersion = version; 
+                 AssemblyFileVersion = version; 
+                 AssemblyInformationalVersion = version })
+
+    // build
+    buildCmd "" "Build" appReferences
     |> Log "AppBuild-Output: "
 )
 
-let getNugetParam param =
-    {param with
-        OutputPath = deployDir
-        WorkingDir = deployDir
-        Dependencies = dependencies
-        ReleaseNotes = System.IO.File.ReadAllText releaseNotes
-        Version = version }
-
-Target "Pack" (fun _ -> NuGetPack getNugetParam "./picdoc/picdoc.fsproj") // doesn't properly bundle picdoc.exe and its dependencies
+Target "Pack" (fun _ -> 
+    Fake.Paket.Pack (fun p -> 
+        { p with WorkingDir="./"
+                 LockDependencies=true
+                 Version=version
+                 OutputPath="nugets" }))
 
 // Build order
 "Clean"

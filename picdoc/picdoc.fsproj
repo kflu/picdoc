@@ -42,6 +42,7 @@
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyInfo.fs" />
     <Compile Include="core.fs" />
     <Compile Include="renderer.fs" />
     <Compile Include="picdoc.fs" />

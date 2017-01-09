@@ -1,27 +1,29 @@
-module renderer
+namespace picdoc
 
-open Nustache.Core
-open core
+module renderer = 
 
-module Markdown =
+    open Nustache.Core
+    open core
 
-    let template = """
-{{#images}}
-![{{title}}]({{path}})
+    module Markdown =
 
-{{#title}}
-**{{title}}**
+        let template = """
+    {{#images}}
+    ![{{title}}]({{path}})
 
-{{/title}}
-{{#description}}
-{{description}}
+    {{#title}}
+    **{{title}}**
 
-{{/description}}
-{{/images}}
-"""
-    let createData (infos: ImageInfo seq) =
-        Map.ofList
-            [ "images", infos |> Seq.map (fun info -> info.Props) |> Array.ofSeq ]
+    {{/title}}
+    {{#description}}
+    {{description}}
 
-    let render (infos: ImageInfo seq) =
-        Nustache.Core.Render.StringToString(template, createData infos)
+    {{/description}}
+    {{/images}}
+    """
+        let createData (infos: ImageInfo seq) =
+            Map.ofList
+                [ "images", infos |> Seq.map (fun info -> info.Props) |> Array.ofSeq ]
+
+        let render (infos: ImageInfo seq) =
+            Nustache.Core.Render.StringToString(template, createData infos)

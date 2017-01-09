@@ -9,14 +9,14 @@ module renderer =
 
         let template = """
     {{#images}}
-    ![{{title}}]({{path}})
+    ![{{& title}}]({{& path}})
 
     {{#title}}
-    **{{title}}**
+    **{{& title}}**
 
     {{/title}}
     {{#description}}
-    {{description}}
+    {{& description}}
 
     {{/description}}
     {{/images}}

@@ -1,6 +1,6 @@
 source https://www.nuget.org/api/v2
+nuget Fsharp.Core ~> 4.0.0.1
 nuget FAKE
-nuget FSharp.Core
 nuget MetadataExtractor
 nuget Argu
 nuget Nustache

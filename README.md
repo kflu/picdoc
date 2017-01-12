@@ -2,7 +2,9 @@ A command line tool to generate markdown doc by extracting metadata from image f
 
 ## Install
 
-With Nuget:
+Download from [Github Release](https://github.com/kflu/picdoc/releases) (portable executable).
+
+Or with Nuget:
 
     PM> Install-Package picdoc
 

@@ -68,12 +68,14 @@ Target "Merge" (fun _ ->
         "picdoc/bin/picdoc.exe"
 )
 
+Target "All" DoNothing
+
 // Build order
 "Clean"
   ==> "Build"
   ==> "Merge"
   ==> "Pack"
+  ==> "All"
   
 // start build
-RunTargetOrDefault "Build"
 RunTargetOrDefault "Merge"

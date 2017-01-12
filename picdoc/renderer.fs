@@ -8,18 +8,18 @@ module renderer =
     module Markdown =
 
         let template = """
-    {{#images}}
-    ![{{& title}}]({{& path}})
+{{#images}}
+![{{& title}}]({{& path}})
 
-    {{#title}}
-    **{{& title}}**
+{{#title}}
+**{{& title}}**
 
-    {{/title}}
-    {{#description}}
-    {{& description}}
+{{/title}}
+{{#description}}
+{{& description}}
 
-    {{/description}}
-    {{/images}}
+{{/description}}
+{{/images}}
     """
         let createData (infos: ImageInfo seq) =
             Map.ofList

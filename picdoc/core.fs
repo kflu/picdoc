@@ -16,9 +16,13 @@ module core =
 
     module utils =
         let getTags (fn:string) =
-            ImageMetadataReader.ReadMetadata(fn)
-            |> Seq.collect (fun (d: Directory) -> d.Tags)
-            |> Array.ofSeq
+            try
+                ImageMetadataReader.ReadMetadata(fn)
+                |> Seq.collect (fun (d: Directory) -> d.Tags)
+                |> Array.ofSeq
+                |> Some
+            with
+            | :? MetadataExtractor.ImageProcessingException -> None
 
         let eqi x y = System.String.Equals(x, y, System.StringComparison.CurrentCultureIgnoreCase)
 

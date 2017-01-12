@@ -1,3 +1,6 @@
+## New in 1.0.4 (Released 2017/01/11)
+* Minor fixes
+
 ## New in 1.0.3 (Released 2017/01/11)
 * Added ilmerged finally executable (no external dependencies)
 * Simplified dependencies

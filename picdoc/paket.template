@@ -8,7 +8,8 @@ files
     bin/**/* ==> tools/
 
 // To minimize download size. There could be another nuget library package
-// for people to reference to
+// for people to reference to. Everything needed is already copied to tools/
+// folder.
 excludeddependencies
     FSharp.Core
     MetadataExtractor

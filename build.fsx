@@ -4,6 +4,8 @@
 open Fake
 open Fake.Paket
 open System.IO
+open Fake.ILMergeHelper
+open Fake.FileUtils
 
 let dependencies = 
     Fake.Paket.GetDependenciesForReferencesFile "./picdoc/paket.references"
@@ -56,10 +58,22 @@ Target "Pack" (fun _ ->
                  Version=version
                  OutputPath="nugets" }))
 
+Target "Merge" (fun _ ->
+    mkdir "picdoc/bin.merged/"
+    ILMerge 
+        (fun p ->
+            { p with TargetKind = TargetKind.Exe;
+                     Libraries = (!! "picdoc/bin/*.dll") })
+        "picdoc/bin.merged/picdoc.exe"
+        "picdoc/bin/picdoc.exe"
+)
+
 // Build order
 "Clean"
   ==> "Build"
+  ==> "Merge"
   ==> "Pack"
-
+  
 // start build
 RunTargetOrDefault "Build"
+RunTargetOrDefault "Merge"
